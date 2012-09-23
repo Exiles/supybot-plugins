@@ -25,7 +25,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
 ###
 
 import supybot.utils as utils
@@ -42,20 +41,6 @@ from supybot.i18n import PluginInternationalization, internationalizeDocstring
 
 _ = PluginInternationalization('HuntNFish')
 
-try:
-    with open(conf.supybot.directories.data.dirize('hunttrophy.txt')) as f: pass
-except IOError:
-    with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'rw') as file:
-        data = file.readlines()
-        data[0] = "Nobody"
-        data[1] = "nothing" 
-        data[2] = 1
-        file.writelines(str(data[0]))
-        file.writelines('\n')
-        file.writelines(str(data[1]))
-        file.writelines('\n')
-        file.writelines(str(data[2]))
-
 @internationalizeDocstring
 class HuntNFish(callbacks.Plugin):
     """Adds hunt and fish commands for a basic hunting and fishing game."""
@@ -65,6 +50,12 @@ class HuntNFish(callbacks.Plugin):
         """
         performs a random hunt
         """
+    	try:
+		with open(conf.supybot.directories.data.dirize('hunttrophy.txt')) as file: pass
+		except IOError:
+			with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'w') as file:
+			file.writelines('Nobody\nnothing\n2')
+		file.close()
         if(self.registryValue('enable', msg.args[0])):
             animals = [' bear', ' gopher', ' rabbit', ' hunter', ' deer', ' fox', ' duck', ' moose', ' pokemon named Pikachu', ' park ranger', ' Yogi Bear', ' Boo Boo Bear', ' dog named Benji', ' cow', ' raccoon', ' koala bear', ' camper', ' channel lamer', ' your mom']
             places = ['in some bushes', 'in a hunting blind', 'in a hole', 'up in a tree', 'in a hiding place', 'out in the open', 'in the middle of a field', 'downtown', 'on a street corner', 'at the local mall']
@@ -98,11 +89,7 @@ class HuntNFish(callbacks.Plugin):
                             data[0] = msg.nick
                             data[1] = currentWhat 
                             data[2] = weight
-                            file.writelines(str(data[0]))
-                            file.writelines('\n')
-                            file.writelines(str(data[1]))
-                            file.writelines('\n')
-                            file.writelines(str(data[2]))
+                            file.writelines(str(data[0]) + '\n' + str(data[1])+'\n'+str(data[2]))
                             irc.reply("you got a new highscore")
 
 
