@@ -42,6 +42,20 @@ from supybot.i18n import PluginInternationalization, internationalizeDocstring
 
 _ = PluginInternationalization('HuntNFish')
 
+try:
+    with open(conf.supybot.directories.data.dirize('hunttrophy.txt')) as f: pass
+except IOError:
+    with open(conf.supybot.directories.data.dirize('hunttrophy.txt'), 'rw') as file:
+        data = file.readlines()
+        data[0] = "Nobody"
+        data[1] = "nothing" 
+        data[2] = 1
+        file.writelines(str(data[0]))
+        file.writelines('\n')
+        file.writelines(str(data[1]))
+        file.writelines('\n')
+        file.writelines(str(data[2]))
+
 @internationalizeDocstring
 class HuntNFish(callbacks.Plugin):
     """Adds hunt and fish commands for a basic hunting and fishing game."""
@@ -68,7 +82,7 @@ class HuntNFish(callbacks.Plugin):
             irc.reply(thisHunt)
             irc.reply("aims....")
             irc.reply("fires.....")
-            time.sleep(time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
+            time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
             huntChance = random.randint(1,100)
             successRate = self.registryValue('SuccessRate')
             random.setstate(huntrandom)
@@ -118,7 +132,7 @@ class HuntNFish(callbacks.Plugin):
             irc.reply(thisFishing)
             irc.reply("casts in....")
             irc.reply("a " + str(weight) + weightType + currentWhat + " is biting...")
-            time.sleep(time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
+            time.sleep(random.randint(4,8))#pauses the output between line 1 and 2 for 4-8 seconds
             huntChance = random.randint(1,100)
             successRate = self.registryValue('SuccessRate')
             random.setstate(fishrandom)
